@@ -3,9 +3,7 @@ variable "aws_region" {
   default = "us-west-2"
 }
 variable "infra_name" {
+  type = string
   description = "infra name"
   default = "banking-network"
 }
-
-
-

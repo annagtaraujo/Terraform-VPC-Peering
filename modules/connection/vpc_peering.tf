@@ -1,53 +1,32 @@
-#resource "aws_vpc_peering_connection" "vpc_peer_b_to_a" {
-#  peer_owner_id = var.peer_owner_id
-#  peer_vpc_id   = aws_vpc.infra_vpc_a.id
-#  vpc_id        = aws_vpc.infra_vpc_b.id
+#VPC Peering entre VPC A e VPC B
 
-#  accepter {
-#    allow_remote_vpc_dns_resolution = true
-#  }
+resource "aws_vpc_peering_connection" "vpc_peer_a_to_b" {
+  peer_vpc_id   = var.instance_id_b
+  vpc_id        = var.instance_id_a
+  auto_accept = true
 
-#  requester {
-#    allow_remote_vpc_dns_resolution = true
-#  }
-#}
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
 
-#resource "aws_vpc_peering_connection" "vpc_peer_c_to_a" {
-#  peer_owner_id = var.peer_owner_id
-#  peer_vpc_id   = aws_vpc.infra_vpc_a.id
-#  vpc_id        = aws_vpc.infra_vpc_c.id
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+}
+#######################################################################
 
-#  accepter {
-#    allow_remote_vpc_dns_resolution = true
-#  }
+#VPC Peering entre VPC A e VPC C
 
-#  requester {
-#    allow_remote_vpc_dns_resolution = true
-#  }
-#}
+resource "aws_vpc_peering_connection" "vpc_peer_a_to_c" {
+  peer_vpc_id   = var.instance_id_c
+  vpc_id        = var.instance_id_a
+  auto_accept = true
 
-#resource "aws_vpc_peering_connection" "vpc_peer_a_to_b" {
-#  peer_vpc_id   = aws_vpc.infra_vpc_b.id
-#  vpc_id        = aws_vpc.infra_vpc_a.id
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
 
-#  accepter {
-#    allow_remote_vpc_dns_resolution = true
-#  }
-
-#  requester {
-#    allow_remote_vpc_dns_resolution = true
-#  }
-#}
-
-#resource "aws_vpc_peering_connection" "vpc_peer_a_to_c" {
-#  peer_vpc_id   = aws_vpc.infra_vpc_c.id
-#  vpc_id        = aws_vpc.infra_vpc_a.id
-
-#  accepter {
-#    allow_remote_vpc_dns_resolution = true
-#  }
-
-#  requester {
-#    allow_remote_vpc_dns_resolution = true
-#  }
-#}
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+}
