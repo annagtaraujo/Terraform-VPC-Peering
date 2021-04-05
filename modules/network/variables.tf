@@ -4,13 +4,25 @@ variable "aws_region" {}
 
 variable "infra_name" {}
 
-variable "subnet_az_nat_anchor"{
-  default = "us-west-2a"
-}
-
 variable "subnet_azs" {
   default = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"]
 }
+
+variable "ingress_port"{
+  default = [0,8,22,30,80,443]
+}
+
+variable "ami"{
+  default = "ami-0ca5c3bd5a268e7db"
+}
+
+variable "instance_type"{
+  default = "t2.micro"
+}
+
+# variable "subnet_az_nat_anchor"{
+#   default = "us-west-2a"
+# }
 #######################################################################################
 
 #Variáveis da VPC A
@@ -31,9 +43,9 @@ variable "database_subnets_a"{
   default = ["10.10.31.0/24","10.10.32.0/24","10.10.33.0/24","10.10.34.0/24"]
 }
 
-variable "public_subnet_a_nat_anchor"{
-  default = "10.10.10.240/28"
-}
+# variable "public_subnet_a_nat_anchor"{
+#   default = "10.10.10.240/28"
+# }
 #######################################################################################3
 
 #Variáveis da VPC B
@@ -54,9 +66,9 @@ variable "database_subnets_b"{
   default = ["10.20.31.0/24","10.20.32.0/24","10.20.33.0/24","10.20.34.0/24"]
 }
 
-variable "public_subnet_b_nat_anchor"{
-  default = "10.20.10.240/28"
-}
+# variable "public_subnet_b_nat_anchor"{
+#   default = "10.20.10.240/28"
+# }
 #######################################################################################3
 
 #Variáveis da VPC C
@@ -77,6 +89,6 @@ variable "database_subnets_c"{
   default = ["10.30.31.0/24","10.30.32.0/24","10.30.33.0/24","10.30.34.0/24"]
 }
 
-variable "public_subnet_c_nat_anchor"{
-  default = "10.30.10.240/28"
-}
+# variable "public_subnet_c_nat_anchor"{
+#   default = "10.30.10.240/28"
+# }
