@@ -63,7 +63,7 @@ resource "aws_instance" "vpc_a_priv_1" {
   private_ip                  = "10.10.21.10"
 
   tags = {
-    Name = "vpc_a_priv_1"
+    Name = format("%s-vpc_a_priv_1",var.infra_name)
   }
 
   depends_on = [
@@ -80,7 +80,7 @@ resource "aws_instance" "vpc_b_priv_1" {
   private_ip                  = "10.20.21.10"
 
   tags = {
-    Name = "vpc_b_priv_1"
+    Name = format("%s-vpc_b_priv_1",var.infra_name)
   }
 
   depends_on = [
@@ -97,7 +97,7 @@ resource "aws_instance" "vpc_c_priv_1" {
   private_ip                  = "10.30.21.10"
 
   tags = {
-    Name = "vpc_c_priv_1"
+    Name = format("%s-vpc_c_priv_1",var.infra_name)
   }
 
   depends_on = [
