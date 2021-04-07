@@ -1,10 +1,9 @@
 variable "aws_region" {
-  description = "aws region"
+  description = "Região da AWS da infra"
   default = "us-west-2"
 }
 variable "infra_name" {
-  description = "infra name"
+  type = string
+  description = "Nome da infra"
   default = "banking-network"
 }
-
-
