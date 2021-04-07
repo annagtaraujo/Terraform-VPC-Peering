@@ -12,6 +12,10 @@ resource "aws_vpc_peering_connection" "vpc_peer_a_to_b" {
   requester {
     allow_remote_vpc_dns_resolution = true
   }
+
+  tags = {
+    Name = format("%s-vpc_peer_a-b",var.infra_name)
+  }
 }
 #######################################################################
 
@@ -28,5 +32,9 @@ resource "aws_vpc_peering_connection" "vpc_peer_a_to_c" {
 
   requester {
     allow_remote_vpc_dns_resolution = true
+  }
+
+  tags = {
+    Name = format("%s-vpc_peer_a-c",var.infra_name)
   }
 }

@@ -4,8 +4,7 @@ resource "aws_route_table" "public_table_a" {
   vpc_id = aws_vpc.infra_vpc_a.id
   
   depends_on = [
-    aws_vpc.infra_vpc_a#,
-    #module.vpc_peering
+    aws_vpc.infra_vpc_a
     ]
   
   tags = {
@@ -17,8 +16,7 @@ resource "aws_route_table" "private_table_a" {
   vpc_id = aws_vpc.infra_vpc_a.id
 
   depends_on = [
-    aws_vpc.infra_vpc_a#,
-    #module.vpc_peering
+    aws_vpc.infra_vpc_a
   ]
 
     tags = {
@@ -26,27 +24,45 @@ resource "aws_route_table" "private_table_a" {
     }
 }
 
-# resource "aws_route" "public_internet_gateway_a" {
-#   route_table_id         = aws_route_table.public_table_a.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   gateway_id             = aws_internet_gateway.igw_a.id
-#   #vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
+resource "aws_route" "public_internet_gateway_a" {
+  route_table_id         = aws_route_table.public_table_a.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw_a.id
 
-#   timeouts {
-#     create = "5m"
-#   }
-# }
+  timeouts {
+    create = "5m"
+  }
+}
 
-# resource "aws_route" "private_internet_gateway_a" {
-#   route_table_id         = aws_route_table.private_table_a.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   nat_gateway_id             = aws_nat_gateway.nat_a.id
-#   #vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
+resource "aws_route" "peer_ab" {
+  route_table_id         = aws_route_table.public_table_a.id
+  destination_cidr_block = var.cidr_block_b
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
 
-#   timeouts {
-#     create = "5m"
-#   }
-# }
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "peer_ac" {
+  route_table_id         = aws_route_table.public_table_a.id
+  destination_cidr_block = var.cidr_block_c
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
+
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "private_internet_gateway_a" {
+  route_table_id         = aws_route_table.private_table_a.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id             = aws_nat_gateway.nat_a.id
+
+  timeouts {
+    create = "5m"
+  }
+}
 
 resource "aws_route_table_association" "public_a"{  
    count = 4
@@ -59,15 +75,16 @@ resource "aws_route_table_association" "public_a"{
    ]
 }
 
-# resource "aws_route_table_association" "public_a_nat_anchor"{  
-#    subnet_id = aws_subnet.vpc-public-subnet-a-nat-anchor.id
-#    route_table_id = aws_route_table.public_table_a.id
+resource "aws_route_table_association" "private_a"{  
+   count = 4
+   subnet_id = aws_subnet.vpc-private-subnet-a[count.index].id
+   route_table_id = aws_route_table.private_table_a.id
 
-#    depends_on = [
-#      aws_subnet.vpc-public-subnet-a-nat-anchor,
-#      aws_vpc.infra_vpc_a
-#    ]
-# }
+   depends_on = [
+     aws_subnet.vpc-private-subnet-a,
+     aws_vpc.infra_vpc_a
+   ]
+}
 ######################################################################################
 
 #Route Tables e Associations da VPC B
@@ -76,8 +93,7 @@ resource "aws_route_table" "public_table_b" {
   vpc_id = aws_vpc.infra_vpc_b.id
   
   depends_on = [
-    aws_vpc.infra_vpc_b#,
-    #module.vpc_peering
+    aws_vpc.infra_vpc_b
     ]
   
   tags = {
@@ -89,8 +105,7 @@ resource "aws_route_table" "private_table_b" {
   vpc_id = aws_vpc.infra_vpc_b.id
 
   depends_on = [
-    aws_vpc.infra_vpc_b#,
-    #module.vpc_peering
+    aws_vpc.infra_vpc_b
   ]
 
     tags = {
@@ -98,27 +113,35 @@ resource "aws_route_table" "private_table_b" {
     }
 }
 
-# resource "aws_route" "public_internet_gateway_b" {
-#   route_table_id         = aws_route_table.public_table_b.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   gateway_id             = aws_internet_gateway.igw_b.id
-#   #vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
+resource "aws_route" "public_internet_gateway_b" {
+  route_table_id         = aws_route_table.public_table_b.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw_b.id
 
-#   timeouts {
-#     create = "5m"
-#   }
-# }
+  timeouts {
+    create = "5m"
+  }
+}
 
-# resource "aws_route" "private_internet_gateway_b" {
-#   route_table_id         = aws_route_table.private_table_b.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   nat_gateway_id             = aws_nat_gateway.nat_b.id
-#   #vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
+resource "aws_route" "peer_b" {
+  route_table_id         = aws_route_table.public_table_b.id
+  destination_cidr_block = var.cidr_block_a
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
 
-#   timeouts {
-#     create = "5m"
-#   }
-# }
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "private_internet_gateway_b" {
+  route_table_id         = aws_route_table.private_table_b.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id             = aws_nat_gateway.nat_b.id
+
+  timeouts {
+    create = "5m"
+  }
+}
 
 resource "aws_route_table_association" "public_b"{  
    count = 4
@@ -131,15 +154,16 @@ resource "aws_route_table_association" "public_b"{
    ]
 }
 
-# resource "aws_route_table_association" "public_b_nat_anchor"{  
-#    subnet_id = aws_subnet.vpc-public-subnet-b-nat-anchor.id
-#    route_table_id = aws_route_table.public_table_b.id
+resource "aws_route_table_association" "private_b"{  
+   count = 4
+   subnet_id = aws_subnet.vpc-private-subnet-b[count.index].id
+   route_table_id = aws_route_table.private_table_b.id
 
-#    depends_on = [
-#      aws_subnet.vpc-public-subnet-b-nat-anchor,
-#      aws_vpc.infra_vpc_b
-#    ]
-# }
+   depends_on = [
+     aws_subnet.vpc-private-subnet-b,
+     aws_vpc.infra_vpc_b
+   ]
+}
 ######################################################################################
 
 #Route Tables e Associations da VPC C
@@ -148,8 +172,7 @@ resource "aws_route_table" "public_table_c" {
   vpc_id = aws_vpc.infra_vpc_c.id
   
   depends_on = [
-    aws_vpc.infra_vpc_c#,
-    #module.vpc_peering
+    aws_vpc.infra_vpc_c
     ]
   
   tags = {
@@ -161,8 +184,7 @@ resource "aws_route_table" "private_table_c" {
   vpc_id = aws_vpc.infra_vpc_c.id
 
   depends_on = [
-    aws_vpc.infra_vpc_c#,
-    #module.vpc_peering
+    aws_vpc.infra_vpc_c
   ]
 
     tags = {
@@ -170,27 +192,35 @@ resource "aws_route_table" "private_table_c" {
     }
 }
 
-# resource "aws_route" "public_internet_gateway_c" {
-#   route_table_id         = aws_route_table.public_table_c.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   gateway_id             = aws_internet_gateway.igw_c.id
-#   #vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
+resource "aws_route" "public_internet_gateway_c" {
+  route_table_id         = aws_route_table.public_table_c.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw_c.id
 
-#   timeouts {
-#     create = "5m"
-#   }
-# }
+  timeouts {
+    create = "5m"
+  }
+}
 
-# resource "aws_route" "private_internet_gateway_c" {
-#   route_table_id         = aws_route_table.private_table_c.id
-#   destination_cidr_block = "0.0.0.0/0"
-#   nat_gateway_id             = aws_nat_gateway.nat_c.id
-#   #vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
+resource "aws_route" "peer_c" {
+  route_table_id         = aws_route_table.public_table_c.id
+  destination_cidr_block = var.cidr_block_a
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
 
-#   timeouts {
-#     create = "5m"
-#   }
-# }
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "private_internet_gateway_c" {
+  route_table_id         = aws_route_table.private_table_c.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id             = aws_nat_gateway.nat_c.id
+
+  timeouts {
+    create = "5m"
+  }
+}
 
 resource "aws_route_table_association" "public_c"{  
    count = 4
@@ -203,12 +233,13 @@ resource "aws_route_table_association" "public_c"{
    ]
 }
 
-# resource "aws_route_table_association" "public_c_nat_anchor"{  
-#    subnet_id = aws_subnet.vpc-public-subnet-c-nat-anchor.id
-#    route_table_id = aws_route_table.public_table_c.id
+resource "aws_route_table_association" "private_c"{  
+   count = 4
+   subnet_id = aws_subnet.vpc-private-subnet-c[count.index].id
+   route_table_id = aws_route_table.private_table_c.id
 
-#    depends_on = [
-#      aws_subnet.vpc-public-subnet-c-nat-anchor,
-#      aws_vpc.infra_vpc_c
-#    ]
-# }
+   depends_on = [
+     aws_subnet.vpc-private-subnet-c,
+     aws_vpc.infra_vpc_c
+   ]
+}
