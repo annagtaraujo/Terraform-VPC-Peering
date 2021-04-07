@@ -23,7 +23,6 @@ resource "aws_security_group" "sec-group-vpc-a-tcp" {
 
   tags = {
     Name = "sec-group-vpc-a-ssh-http-https"
-    #scenario = "${var.scenario}"
   }
 }
 
@@ -48,7 +47,6 @@ resource "aws_security_group" "sec-group-vpc-a-icmp" {
 
   tags = {
     Name = "sec-group-vpc-a-all-icmp"
-    #scenario = "${var.scenario}"
   }
 }
 ############################################################################
@@ -80,7 +78,6 @@ resource "aws_security_group" "sec-group-vpc-b-tcp" {
 
   tags = {
     Name = "sec-group-vpc-b-ssh-http-https"
-    #scenario = "${var.scenario}"
   }
 }
 
@@ -105,7 +102,6 @@ resource "aws_security_group" "sec-group-vpc-b-icmp" {
 
   tags = {
     Name = "sec-group-vpc-b-all-icmp"
-    #scenario = "${var.scenario}"
   }
 }
 ########################################################################
@@ -137,7 +133,6 @@ resource "aws_security_group" "sec-group-vpc-c-tcp" {
 
   tags = {
     Name = "sec-group-vpc-c-ssh-http-https"
-    #scenario = "${var.scenario}"
   }
 }
 
@@ -162,6 +157,5 @@ resource "aws_security_group" "sec-group-vpc-c-icmp" {
 
   tags = {
     Name = "sec-group-vpc-c-all-icmp"
-    #scenario = "${var.scenario}"
   }
 }

@@ -5,24 +5,29 @@ variable "aws_region" {}
 variable "infra_name" {}
 
 variable "subnet_azs" {
+  description = "Região das subnets. Em cada VPC serão 3 subnets por AZ: Pública, Privada e Database"
   default = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"]
 }
 
 variable "ingress_port"{
-  default = [0,8,22,30,80,443]
+  description = "Portas inbound liberadas"
+  default = [22,80,443]
 }
 
 variable "ami"{
+  description = "AMI Ubuntu 20.04"
   default = "ami-0ca5c3bd5a268e7db"
 }
 
 variable "instance_type"{
+  description = "Tipo das instâncias"
   default = "t2.micro"
 }
 
-# variable "subnet_az_nat_anchor"{
-#   default = "us-west-2a"
-# }
+variable "public_key"{
+  description = "Public key de acesso às instâncias públicas"
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpuAcCDGl/ONwyusp4q34RVPA5py/1Acj6zPHQcMnPJsbAajg5qpEunxncmPio35Qf1Q5HcVxpK2IpSRVJUH3C8n8EUWPvOZIBApfTcGumUO1UhTQr7lv/3Jthpn3jYivLYk8RsRj55noW/HbWVesEnitWQmAIhi169t/yAknPH6cyXImJe6o6WfbMU/6h8iZ7XLYbt8AmcXRK0oUgY9m9TFvQHVW2SOdhNzI+LI+YeBovNV+esDDMb7s7fpo+dFolubslyhbOlt09W7iLIDvUh+/1ooYtt5NOGDlQlbgEQqpVnd5xuL/8mU144VGvrJT1NbRLKf4VRHa5jfe4GTh7 annagtaraujo@BRRIOWN021449"
+}
 #######################################################################################
 
 #Variáveis da VPC A
@@ -42,10 +47,6 @@ variable "private_subnets_a"{
 variable "database_subnets_a"{
   default = ["10.10.31.0/24","10.10.32.0/24","10.10.33.0/24","10.10.34.0/24"]
 }
-
-# variable "public_subnet_a_nat_anchor"{
-#   default = "10.10.10.240/28"
-# }
 #######################################################################################3
 
 #Variáveis da VPC B
@@ -65,10 +66,6 @@ variable "private_subnets_b"{
 variable "database_subnets_b"{
   default = ["10.20.31.0/24","10.20.32.0/24","10.20.33.0/24","10.20.34.0/24"]
 }
-
-# variable "public_subnet_b_nat_anchor"{
-#   default = "10.20.10.240/28"
-# }
 #######################################################################################3
 
 #Variáveis da VPC C
@@ -88,7 +85,3 @@ variable "private_subnets_c"{
 variable "database_subnets_c"{
   default = ["10.30.31.0/24","10.30.32.0/24","10.30.33.0/24","10.30.34.0/24"]
 }
-
-# variable "public_subnet_c_nat_anchor"{
-#   default = "10.30.10.240/28"
-# }
