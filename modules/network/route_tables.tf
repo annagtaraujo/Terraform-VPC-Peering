@@ -34,8 +34,46 @@ resource "aws_route" "public_internet_gateway_a" {
   }
 }
 
-resource "aws_route" "peer_ab" {
+resource "aws_route" "public_peer_ab" {
   route_table_id         = aws_route_table.public_table_a.id
+  destination_cidr_block = var.cidr_block_b
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
+
+  timeouts {
+    create = "5m"
+  }
+
+  depends_on = [
+    module.vpc_peering.peer_a_to_b_id
+  ]
+}
+
+resource "aws_route" "public_peer_ac" {
+  route_table_id         = aws_route_table.public_table_a.id
+  destination_cidr_block = var.cidr_block_c
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
+
+  timeouts {
+    create = "5m"
+  }
+
+  depends_on = [
+    module.vpc_peering.peer_a_to_c_id
+  ]
+}
+
+resource "aws_route" "private_internet_gateway_a" {
+  route_table_id         = aws_route_table.private_table_a.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id             = aws_nat_gateway.nat_a.id
+
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "private_peer_ab" {
+  route_table_id         = aws_route_table.private_table_a.id
   destination_cidr_block = var.cidr_block_b
   vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
 
@@ -44,20 +82,10 @@ resource "aws_route" "peer_ab" {
   }
 }
 
-resource "aws_route" "peer_ac" {
-  route_table_id         = aws_route_table.public_table_a.id
+resource "aws_route" "private_peer_ac" {
+  route_table_id         = aws_route_table.private_table_a.id
   destination_cidr_block = var.cidr_block_c
   vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
-
-  timeouts {
-    create = "5m"
-  }
-}
-
-resource "aws_route" "private_internet_gateway_a" {
-  route_table_id         = aws_route_table.private_table_a.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id             = aws_nat_gateway.nat_a.id
 
   timeouts {
     create = "5m"
@@ -123,7 +151,7 @@ resource "aws_route" "public_internet_gateway_b" {
   }
 }
 
-resource "aws_route" "peer_b" {
+resource "aws_route" "public_peer_b" {
   route_table_id         = aws_route_table.public_table_b.id
   destination_cidr_block = var.cidr_block_a
   vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
@@ -131,6 +159,10 @@ resource "aws_route" "peer_b" {
   timeouts {
     create = "5m"
   }
+
+  depends_on = [
+    module.vpc_peering.peer_a_to_b_id
+  ]
 }
 
 resource "aws_route" "private_internet_gateway_b" {
@@ -141,6 +173,20 @@ resource "aws_route" "private_internet_gateway_b" {
   timeouts {
     create = "5m"
   }
+}
+
+resource "aws_route" "private_peer_b" {
+  route_table_id         = aws_route_table.private_table_b.id
+  destination_cidr_block = var.cidr_block_a
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_b_id
+
+  timeouts {
+    create = "5m"
+  }
+
+  depends_on = [
+    module.vpc_peering.peer_a_to_b_id
+  ]
 }
 
 resource "aws_route_table_association" "public_b"{  
@@ -202,7 +248,7 @@ resource "aws_route" "public_internet_gateway_c" {
   }
 }
 
-resource "aws_route" "peer_c" {
+resource "aws_route" "public_peer_c" {
   route_table_id         = aws_route_table.public_table_c.id
   destination_cidr_block = var.cidr_block_a
   vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
@@ -210,6 +256,10 @@ resource "aws_route" "peer_c" {
   timeouts {
     create = "5m"
   }
+
+  depends_on = [
+    module.vpc_peering.peer_a_to_c_id
+  ]
 }
 
 resource "aws_route" "private_internet_gateway_c" {
@@ -220,6 +270,20 @@ resource "aws_route" "private_internet_gateway_c" {
   timeouts {
     create = "5m"
   }
+}
+
+resource "aws_route" "private_peer_c" {
+  route_table_id         = aws_route_table.private_table_c.id
+  destination_cidr_block = var.cidr_block_a
+  vpc_peering_connection_id = module.vpc_peering.peer_a_to_c_id
+
+  timeouts {
+    create = "5m"
+  }
+
+  depends_on = [
+    module.vpc_peering.peer_a_to_c_id
+  ]
 }
 
 resource "aws_route_table_association" "public_c"{  
